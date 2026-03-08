@@ -1,20 +1,26 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { NavigationContainer } from "@react-navigation/native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import HomeScreen from "./screens/HomeScreen";
+import PrayerTimeScreen from "./screens/PrayerTimeScreen";
+import QuranScreen from "./screens/QuranScreen"
+import Hadith from "./screens/HadithScreen";
+import Dua from "./screens/DuaScreen";
+import Qibla from "./screens/QiblaScreen";
+
+const Stack = createNativeStackNavigator();
 
 export default function App() {
+
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <NavigationContainer> 
+      <Stack.Navigator initialRouteName="Home" screenOptions={{ headerShown: false }}>
+         <Stack.Screen name="Home" component={HomeScreen} />
+         <Stack.Screen name="PrayerTime" component={PrayerTimeScreen} />
+         <Stack.Screen name="QuranScreen" component={QuranScreen} />
+         <Stack.Screen name="HadithScreen" component={Hadith} />
+         <Stack.Screen name="DuaScreen" component={Dua} />
+         <Stack.Screen name="QiblaScreen" component={Qibla} />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
