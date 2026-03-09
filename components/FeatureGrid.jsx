@@ -9,13 +9,13 @@ const features = [
   { id: "3", title: "Hadith", icon: "hands", screen: "HadithScreen" },
   { id: "4", title: "Dua", icon: "pray", screen: "DuaScreen" },
   { id: "5", title: "Qibla", icon: "compass", screen: "QiblaScreen" },
-  { id: "6", title: "Tasbih", icon: "circle", screen: "PrayerTime" },
-  { id: "7", title: "Zakat", icon: "donate", screen: "PrayerTime" },
-  { id: "8", title: "Hijri", icon: "calendar", screen: "PrayerTime" },
-  { id: "9", title: "Community", icon: "users", screen: "PrayerTime" },
-  { id: "10", title: "Mosque", icon: "place-of-worship", screen: "PrayerTime" },
-  { id: "11", title: "Kitab", icon: "book-open", screen: "PrayerTime" },
-  { id: "12", title: "Donate", icon: "donate", screen: "PrayerTime" },
+  { id: "6", title: "Tasbih", icon: "circle", screen: "TasbihScreen" },
+  { id: "7", title: "Zakat", icon: "donate", screen: "ZakatScreen" },
+  { id: "8", title: "Hijri", icon: "calendar", screen: "HijriScreen" },
+  { id: "9", title: "Community", icon: "users", screen: "CommunityScreen" },
+  { id: "10", title: "Mosque", icon: "place-of-worship", screen: "MosqueScreen" },
+  { id: "11", title: "Kitab", icon: "book-open", screen: "KitabScreen" },
+  { id: "12", title: "Donate", icon: "donate", screen: "DonateScreen" },
 ];
 
 export default function FeatureGrid() {

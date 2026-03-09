@@ -41,7 +41,7 @@ let currentPrayer = "Fajr";
   }
 
   return (
-    <View className="flex-row justify-between px-7 py-4 bg-white">
+    <View className="flex-row justify-between px-8 py-4 bg-white">
       {prayers.map((prayer, index) => {
         const isActive = prayer === currentPrayer;
 

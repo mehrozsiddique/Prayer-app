@@ -15,6 +15,7 @@ export default function PrayerTimeScreen() {
   const [country, setCountry] = useState("");
   const [nextPrayer, setNextPrayer] = useState("");
   const [countdown, setCountdown] = useState("");
+  const [currentPrayer, setCurrentPrayer] = useState("");
 
   const handleBack = () => {
     navigation.goBack();
@@ -32,31 +33,31 @@ export default function PrayerTimeScreen() {
 
   const getLocation = async () => {
 
-  let { status } = await Location.requestForegroundPermissionsAsync();
+    let { status } = await Location.requestForegroundPermissionsAsync();
 
-  if (status !== "granted") {
-    alert("Location permission denied");
-    return;
-  }
+    if (status !== "granted") {
+      alert("Location permission denied");
+      return;
+    }
 
-  let location = await Location.getLastKnownPositionAsync();
+    let location = await Location.getLastKnownPositionAsync();
 
-  if (!location) {
-    location = await Location.getCurrentPositionAsync({});
-  }
+    if (!location) {
+      location = await Location.getCurrentPositionAsync({});
+    }
 
-  let geo = await Location.reverseGeocodeAsync({
-    latitude: location.coords.latitude,
-    longitude: location.coords.longitude,
-  });
+    let geo = await Location.reverseGeocodeAsync({
+      latitude: location.coords.latitude,
+      longitude: location.coords.longitude,
+    });
 
-  const place = geo[0];
+    const place = geo[0];
 
-  setCity(place.city);
-  setCountry(place.country);
+    setCity(place.city);
+    setCountry(place.country);
 
-  fetchPrayerTimes(place.city, place.country);
-};
+    fetchPrayerTimes(place.city, place.country);
+  };
 
   const fetchPrayerTimes = async (cityName, countryName) => {
 
@@ -79,24 +80,28 @@ export default function PrayerTimeScreen() {
 
   const getNextPrayer = () => {
 
-    const prayerOrder = ["Fajr","Dhuhr","Asr","Maghrib","Isha"];
+    const prayerOrder = ["Fajr", "Dhuhr", "Asr", "Maghrib", "Isha"];
 
     const now = new Date();
 
-    for (let prayer of prayerOrder) {
+    for (let i = 0; i < prayerOrder.length; i++) {
 
+      const prayer = prayerOrder[i];
       const time = timings[prayer];
 
       const [hour, minute] = time.split(":");
 
       const prayerTime = new Date();
-
       prayerTime.setHours(hour);
       prayerTime.setMinutes(minute);
+      prayerTime.setSeconds(0);
 
       if (prayerTime > now) {
 
         setNextPrayer(prayer);
+
+        const current = prayerOrder[i - 1] || "Isha";
+        setCurrentPrayer(current);
 
         const diff = prayerTime - now;
 
@@ -111,6 +116,12 @@ export default function PrayerTimeScreen() {
     }
   };
 
+
+  const isActive = (prayer) => {
+    return currentPrayer === prayer;
+  };
+
+
   if (!timings) {
     return (
       <SafeAreaView className="flex-1 justify-center items-center bg-[#0F1B2E]">
@@ -122,23 +133,23 @@ export default function PrayerTimeScreen() {
   return (
     <SafeAreaView className="flex-1 bg-[#0F1B2E]">
 
-     <View className="bg-[#2E6F95] py-6 px-6">
+      <View className="bg-[#2E6F95] py-6 px-6">
 
-  <View className="flex-row items-center justify-between">
+        <View className="flex-row items-center justify-between">
 
-    <TouchableOpacity onPress={handleBack}>
-      <Feather name="arrow-left" size={22} color="white" />
-    </TouchableOpacity>
+          <TouchableOpacity onPress={handleBack}>
+            <Feather name="arrow-left" size={22} color="white" />
+          </TouchableOpacity>
 
-    <Text className="text-white text-xl font-bold">
-      Prayer Time
-    </Text>
+          <Text className="text-white text-xl font-bold">
+            Prayer Time
+          </Text>
 
-    <Feather name="settings" size={22} color="white" />
+          <Feather name="settings" size={22} color="white" />
 
-  </View>
+        </View>
 
-</View>
+      </View>
 
 
       <View className="bg-[#3B3B3B] py-6 px-4">
@@ -204,7 +215,7 @@ export default function PrayerTimeScreen() {
           </Text>
 
           <Text className="text-gray-400 text-xs">
-            {date.hijri.date}
+            {date.hijri.day} {date.hijri.month.en} {date.hijri.year}
           </Text>
 
         </View>
@@ -228,32 +239,32 @@ export default function PrayerTimeScreen() {
 
       <View className="mx-4 mt-3">
 
-        <View className="flex-row justify-between bg-[#162033] p-4 rounded-xl mb-2">
+        <View className={`flex-row justify-between p-4 rounded-xl mb-2 ${isActive("Fajr") ? "bg-[#6B4E2E]" : "bg-[#162033]"}`}>
           <Text className="text-white">Fajr</Text>
           <Text className="text-gray-300">{timings.Fajr}</Text>
         </View>
 
-        <View className="flex-row justify-between bg-[#6B4E2E] p-4 rounded-xl mb-2">
+        <View className={`flex-row justify-between p-4 rounded-xl mb-2 ${isActive("Sunrise") ? "bg-[#6B4E2E]" : "bg-[#162033]"}`}>
           <Text className="text-white">Sunrise</Text>
-          <Text className="text-white">{timings.Sunrise}</Text>
+          <Text className="text-gray-300">{timings.Sunrise}</Text>
         </View>
 
-        <View className="flex-row justify-between bg-[#162033] p-4 rounded-xl mb-2">
+        <View className={`flex-row justify-between p-4 rounded-xl mb-2 ${isActive("Dhuhr") ? "bg-[#6B4E2E]" : "bg-[#162033]"}`}>
           <Text className="text-white">Dhuhr</Text>
           <Text className="text-gray-300">{timings.Dhuhr}</Text>
         </View>
 
-        <View className="flex-row justify-between bg-[#162033] p-4 rounded-xl mb-2">
+        <View className={`flex-row justify-between p-4 rounded-xl mb-2 ${isActive("Asr") ? "bg-[#6B4E2E]" : "bg-[#162033]"}`}>
           <Text className="text-white">Asr</Text>
           <Text className="text-gray-300">{timings.Asr}</Text>
         </View>
 
-        <View className="flex-row justify-between bg-[#162033] p-4 rounded-xl mb-2">
+        <View className={`flex-row justify-between p-4 rounded-xl mb-2 ${isActive("Maghrib") ? "bg-[#6B4E2E]" : "bg-[#162033]"}`}>
           <Text className="text-white">Maghrib</Text>
           <Text className="text-gray-300">{timings.Maghrib}</Text>
         </View>
 
-        <View className="flex-row justify-between bg-[#162033] p-4 rounded-xl">
+        <View className={`flex-row justify-between p-4 rounded-xl ${isActive("Isha") ? "bg-[#6B4E2E]" : "bg-[#162033]"}`}>
           <Text className="text-white">Isha</Text>
           <Text className="text-gray-300">{timings.Isha}</Text>
         </View>

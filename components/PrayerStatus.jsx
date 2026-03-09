@@ -22,10 +22,10 @@ export default function PrayerStatus({ prayerTimes, nextPrayer }) {
 
       let diff = nextTime - now;
 
-    if (diff < 0) {
-  nextTime.setDate(nextTime.getDate() + 1);
-  diff = nextTime - now;
-}
+      if (diff < 0) {
+        nextTime.setDate(nextTime.getDate() + 1);
+        diff = nextTime - now;
+      }
 
       const h = Math.floor(diff / (1000 * 60 * 60));
       const m = Math.floor((diff / (1000 * 60)) % 60);
@@ -56,32 +56,28 @@ export default function PrayerStatus({ prayerTimes, nextPrayer }) {
     <View className="px-5 py-4 bg-white">
       <View className="flex-row items-center">
 
-        
         <View className="flex-1 mb-5">
 
-          
           <View className="flex-row items-center gap-12">
             <Text className="text-gray-900 text-lg w-16">Now</Text>
             <Text className="text-lg text-gray-900">{now}</Text>
           </View>
 
-        
           <View className="my-1 flex-row pl-16">
             <Feather name="arrow-right" size={18} color="#222" />
           </View>
 
-      
           <View className="flex-row items-center gap-12">
             <Text className="font-bold text-black w-16">
               {nextPrayer === "Fajr"
                 ? "ISHA"
                 : nextPrayer === "Dhuhr"
-                ? "FAJR"
-                : nextPrayer === "Asr"
-                ? "DHUHR"
-                : nextPrayer === "Maghrib"
-                ? "ASR"
-                : "MAGHRIB"}
+                  ? "FAJR"
+                  : nextPrayer === "Asr"
+                    ? "DHUHR"
+                    : nextPrayer === "Maghrib"
+                      ? "ASR"
+                      : "MAGHRIB"}
             </Text>
 
             <Text className="font-bold text-black">
@@ -91,7 +87,6 @@ export default function PrayerStatus({ prayerTimes, nextPrayer }) {
 
         </View>
 
-      
         <View className="h-20 w-20 rounded-full border-[3px] border-gray-300 items-center justify-center mr-6">
           <Text className="text-[10px] text-gray-600 text-center leading-4">
             Time{"\n"}

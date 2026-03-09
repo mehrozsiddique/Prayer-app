@@ -10,7 +10,6 @@ export default function TopHeader() {
     const [city, setCity] = useState("Loading...");
     const [country, setCountry] = useState("");
 
-    // Fetch current location
     const getLocation = async () => {
         try {
             let { status } = await Location.requestForegroundPermissionsAsync();
@@ -50,7 +49,7 @@ export default function TopHeader() {
         getLocation();
     }, []);
 
-    
+
     const onChange = (event, selectedDate) => {
         const currentDate = selectedDate || date;
         setShow(Platform.OS === "ios");
@@ -74,7 +73,7 @@ export default function TopHeader() {
     return (
         <View className="bg-white px-4 pt-6 pb-4">
 
-        
+
             <View className="flex-row justify-between items-center mb-4">
                 <TouchableOpacity
                     onPress={() => setShow(true)}
@@ -87,12 +86,12 @@ export default function TopHeader() {
                     </View>
                 </TouchableOpacity>
 
-                <Text className="text-sm text-gray-800 ml-auto mr-3">
+                <Text className="text-sm text-gray-800 ml-auto mr-5">
                     {city}, {country}
                 </Text>
             </View>
 
-    
+
             <View className="flex-row items-center">
                 <View className="bg-gray-800 h-9 w-9 rounded-lg items-center justify-center">
                     <FontAwesome5 name="bell" size={18} color="white" />
@@ -105,7 +104,7 @@ export default function TopHeader() {
                 </View>
             </View>
 
-    
+
             {show && (
                 <DateTimePicker
                     value={date}
