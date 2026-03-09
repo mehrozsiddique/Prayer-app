@@ -10,7 +10,7 @@ export default function PrayerTabs({ prayerTimes }) {
   const getPrayerDate = (time) => {
     const [hours, minutes] = time.split(":");
     const date = new Date();
-    date.setHours(hours);
+    date.setHours(hours); 
     date.setMinutes(minutes);
     date.setSeconds(0);
     return date;
