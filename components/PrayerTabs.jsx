@@ -25,7 +25,7 @@ export default function PrayerTabs({ prayerTimes }) {
 
   return date.toLocaleTimeString([], {
     hour: "numeric",
-    minute: "2-digit",
+    minute: "2-digit",  
     hour12: true,
   });
 };

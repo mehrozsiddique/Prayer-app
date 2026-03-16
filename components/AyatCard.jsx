@@ -1,31 +1,69 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, TouchableOpacity, ActivityIndicator } from "react-native";
+import { View, Text, TouchableOpacity, ActivityIndicator, Share } from "react-native";
 import { MaterialCommunityIcons, Ionicons } from "@expo/vector-icons";
+import { Audio } from "expo-av";
 
 export default function AyatCard() {
 
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [arabic, setArabic] = useState("");
+  const [english, setEnglish] = useState("");
+  const [audio, setAudio] = useState(null);
+  const [sound, setSound] = useState();
 
   const fetchAyat = async () => {
     setLoading(true);
 
     try {
-
       const randomAyah = Math.floor(Math.random() * 6236) + 1;
 
       const res = await fetch(
-        `https://api.alquran.cloud/v1/ayah/${randomAyah}/quran-uthmani`
+        `https://api.alquran.cloud/v1/ayah/${randomAyah}/editions/quran-indopak,en.sahih,ar.alafasy`
       );
 
       const json = await res.json();
-      setData(json.data);
+
+      const arabicData = json.data[0];   
+      const englishData = json.data[1];  
+      const audioData = json.data[2];    
+
+      setData(arabicData);
+      setArabic(arabicData.text);
+      setEnglish(englishData.text);
+      setAudio(audioData.audio);
 
     } catch (e) {
       console.log(e);
     }
 
     setLoading(false);
+  };
+
+  const playAudio = async () => {
+    if (!audio) return;
+
+    const { sound } = await Audio.Sound.createAsync({ uri: audio });
+    setSound(sound);
+    await sound.playAsync();
+  };
+
+  const shareAyah = async () => {
+    if (!data) return;
+
+    const message = `${arabic}
+
+${english}
+
+${data.surah.englishName} (${data.numberInSurah})`;
+
+    try {
+      await Share.share({
+        message: message,
+      });
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   useEffect(() => {
@@ -71,8 +109,12 @@ export default function AyatCard() {
 
           <View className="flex-row gap-4">
 
-            <TouchableOpacity>
+            <TouchableOpacity onPress={shareAyah}>
               <Ionicons name="share-social-outline" size={24} color="white" />
+            </TouchableOpacity>
+
+            <TouchableOpacity onPress={playAudio}>
+              <MaterialCommunityIcons name="volume-high" size={24} color="white" />
             </TouchableOpacity>
 
             <TouchableOpacity onPress={fetchAyat}>
@@ -86,7 +128,11 @@ export default function AyatCard() {
         <View className="mt-10 mb-6">
 
           <Text className="text-white text-3xl text-right leading-[55px]">
-            {data.text}
+            {arabic}
+          </Text>
+
+          <Text className="text-white text-lg mt-6">
+            {english}
           </Text>
 
           <Text className="text-yellow-400 text-2xl text-right mt-4">
